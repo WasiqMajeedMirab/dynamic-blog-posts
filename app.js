@@ -26,6 +26,7 @@ const postSchema = {
 };
 
 const Post = mongoose.model("Post", postSchema);
+
 app.get("/",function(req,res){
   Post.find({}, function(err, posts){
     res.render("home", {
@@ -53,27 +54,31 @@ app.post("/compose",function(req,res){
     content: req.body.postBody
   });
 
-  post.save();
+  post.save(function(err){
 
-  res.redirect("/");
+  if (!err){
+
+    res.redirect("/");
+
+  }
+
 });
 
-app.get("/posts/:postName", function(req, res){
-  const requestedTitle = _.lowerCase(req.params.postName);
 
-  posts.forEach(function(post){
-    const storedTitle = _.lowerCase(post.title);
+});
 
-    if (storedTitle === requestedTitle) {
-      res.render("post", {
-        title: post.title,
-        content: post.content
-      });
-    }
+app.get("/posts/:postId", function(req, res){
+
+const requestedPostId = req.params.postId;
+
+  Post.findOne({_id: requestedPostId}, function(err, post){
+    res.render("post", {
+      title: post.title,
+      content: post.content
+    });
   });
 
 });
-
 app.listen(3000, function() {
   console.log("Server started on port 3000");
 });
