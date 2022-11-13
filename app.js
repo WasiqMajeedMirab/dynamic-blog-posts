@@ -33,10 +33,7 @@ app.get("/",function(req,res){
       homeStartingContent: homeStartingContent,
       posts: posts
       });
-
-
   });
-
 });
 app.get("/aboutus",function(req,res){
   res.render("about",{aboutContent:aboutContent});
